@@ -61,14 +61,25 @@ probabilit\`a di copertura del 95\%.
 \begin{lstlisting}
   > twoSeven()
   $tOss
-  [1] 2.04523
-  
-  $lower
-  [1] 25.40383
+  [1] 2.966831
 
-  $upper
-  [1] 27.19617
+  $confidenceInterval
+  [1] 25.40383 27.19617
+
+  $pValue
+  [1] 0.002986329
 \end{lstlisting}
+Inoltre abbiamo condotto un test di significativit\`a per verificare
+se l'additivo \`e efficacie o meno. Per questo mettiamo come ipotesi
+nulla $H_0:$``con un gallone si fanno meno di 25 miglia'' (che
+speriamo di rifiutare) contrapposta a $H_1:$``con un gallone si fanno
+almeno 25 miglia''. Dall'esecuzione del nostro codice otteniamo un
+\emph{p-value} uguale a 0.002, pertanto il test risulta significativo,
+rifiutiamo $H_0$, l'additivo \`e efficacie. \`E da notare che in
+questo caso non \`e stato possibile utilizzare gli algoritmi messi a
+disposizione in R per il test di significativit\`a in quanto non si ha
+il campione visibile (nel prossimo esercizio invece sar\`a possibile
+effettuare il test sia in modo automatico che manuale).
 
 \begin{exercise}{\emph{(2.8 nel testo)}}
   Un misuratore del tasso di alcool nel sangue viene verificato su un
