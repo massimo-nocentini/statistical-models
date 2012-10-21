@@ -21,13 +21,16 @@ Vediamo qualche risultato inserendo in R:
     94.73158 ...
   
   $empiricalMean
-  [1] 100.0089
+  [1] 100.2173
 
   $empiricalVar
-  [1] 166.6052
+  [1] 168.8848
 
   $empiricalVarComputedByHand
-  [1] 166.6052  
+  [1] 168.8848
+
+  $sd
+  [1] 12.99557
 \end{lstlisting}
 L'esecuzione della funzione produce la \autoref{fig:two-six}, dove la
 curva in blu rappresenta la densit\`a inferita usando gli algoritmi
@@ -41,5 +44,69 @@ output come \texttt{empiricalMean} e \texttt{empiricalVar}).
 \caption{Istogramma esercizio 2.6 del testo}
 \label{fig:two-six}
 \end{figure}
-  
 
+\begin{exercise}{\emph{(2.7 nel testo)}}
+  Una azienda chimica ha prodotto un additivo per la benzina che
+  dovrebbe migliorare il consumo oltre le 25 miglia per
+  gallone. Viene fatto un esperimento con 30 auto uguali su un
+  percorso standard e si ottiene un consumo medio di 26.3 mpg con una
+  deviazione standard campionaria di 2.4 mpg. Trovare un intervallo di
+  confidenza al $95\%$ per il consumo medio supponendo il modello normale.
+\end{exercise}
+Questo il codice che implementa l'esercizio:
+\lstinputlisting{r-sources/exercises/chapter-two/two-seven.R} Nel
+campionamento ripetuto l'intervallo di confidenza riportato sotto
+conterr\`a il vero valore del parametro (consumo medio) con una
+probabilit\`a di copertura del 95\%.
+\begin{lstlisting}
+  > twoSeven()
+  $tOss
+  [1] 2.04523
+  
+  $lower
+  [1] 25.40383
+
+  $upper
+  [1] 27.19617
+\end{lstlisting}
+
+\begin{exercise}{\emph{(2.8 nel testo)}}
+  Un misuratore del tasso di alcool nel sangue viene verificato su un
+  campione di prova in cui la misura dovrebbe essere 12\%. Trovare una
+  stima della media e il suo errore standard. Trovare un intervallo di
+  confidenza a livello del 95\% per la media col modello normale. Fare
+  un test dell'ipotesi che il misuratore sia correttamente calibrato
+  cio\`e che $\mu = 12$ contro l'alternativa che $\mu \not = 12$.
+\end{exercise}
+Questo il codice che implementa l'esercizio:
+\lstinputlisting{r-sources/exercises/chapter-two/two-eight.R}
+Vediamo qualche risultato inserendo in R:
+\begin{lstlisting}
+  > twoEight()
+  $automaticTest
+
+  One Sample t-test
+
+  data:  alcoholValues 
+  t = 12.7718, df = 29, p-value = 1.964e-13
+  alternative hypothesis: true mean is not equal to 12 
+  95 percent confidence interval:
+  12.63550 12.87784 
+  sample estimates:
+  mean of x 
+  12.75667 
+
+
+  $tOss
+  [1] 12.77184
+
+  $confidenceInterval
+  [1] 12.63550 12.87784
+
+  $pValue
+  [1] 1.963566e-13
+\end{lstlisting}
+Il test risulta altamente significativo, l'ipotesi nulla $\mu=12$
+viene rifiutata pertanto il misuratore non \`e correttamente
+calibrato.
+  

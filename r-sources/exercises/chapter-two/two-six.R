@@ -10,7 +10,8 @@ twosix <- function(){
               empiricalMean=mean(uniformVector),
               empiricalVar=var(uniformVector),
               empiricalVarComputedByHand=sum((
-                uniformVector-mean(uniformVector))^2)/(dimension-1))
+                uniformVector-mean(uniformVector))^2)/(dimension-1),
+              sd=sqrt(var(uniformVector)))
 
   
   postscript("two-six.ps", horizontal = FALSE)  # set graphical output file
