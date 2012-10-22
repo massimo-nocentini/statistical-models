@@ -120,4 +120,26 @@ Vediamo qualche risultato inserendo in R:
 Il test risulta altamente significativo, l'ipotesi nulla $\mu=12$
 viene rifiutata pertanto il misuratore non \`e correttamente
 calibrato.
-  
+
+
+\begin{exercise}{(2.10 nel testo)}
+  Si studia un campione di 100 individui e si considera il numero di
+  vegetariani.  Si sono osservati $r = 2$ vegetariani su $n = 100$
+  prove (supposte Bernoulli indipendenti e identiche). Trovare
+  l'intervallo di confidenza asintotico al 95\% per la proporzione di
+  vegetariani nella popolazione. Notare che l'intervallo ha il limite
+  inferiore negativo. Calcolare anche l'intervallo di Agresti e Coull.
+\end{exercise}
+Questo il codice che implementa l'esercizio:
+\lstinputlisting{r-sources/exercises/chapter-two/two-ten.R} Osserviamo
+dall'output riportato sotto che l'intervallo di confidenza calcolato
+con il metodo asintotico ha l'intervallo inferiore negativo, mentre
+non \`e cos\`i per quello calcolato con la correzione Agresti-Coull.
+\begin{lstlisting}
+  > twoTen()
+  $asymptotic
+  [1] -0.007439496  0.047439496
+
+  $AgrestiCoull
+  [1] 0.001501869 0.075421208
+\end{lstlisting}
