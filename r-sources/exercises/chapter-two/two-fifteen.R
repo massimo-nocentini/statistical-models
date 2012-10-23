@@ -1,31 +1,28 @@
 twoFifteen <- function(){
-  n <- 10000
-  generatingVector <- seq(from=-4, to=4, length.out=n)
-  x <- rep(0, n)
-  y <- rep(0, n)
+  ## we generate a vector with 1000 items in order to build the plane
+  generatingVector <- seq(from=-4, to=4, length.out=100)
+  n <- length(generatingVector)^2
+  matrix <- matrix(nrow=n, ncol=3)
   ro <- .83
-  for (i in seq(generatingVector)){
-    x[i] <- 37.2 + 6.8*saturateV(generatingVector[i], generatingVector, ro)
-    y[i] <- 39.4 + 7.7*saturateU(generatingVector[i], generatingVector, ro)
+  i <- 1
+  for (u in generatingVector){
+    for (v in generatingVector){
+      matrix[i, 1] <- 37.2 + 6.8*u
+      matrix[i, 2] <-  39.4 + 7.7*v
+      matrix[i, 3] <- multivariateStandardNormal(u, v, ro)
+      i <- i+1
+    }
   }
-  return(list(x=x, y=y))
+  
+  rowIndicesForSample <- sample(x=1:n, size=1000, prob=matrix[,3])
+  sample <- matrix[rowIndicesForSample,]
 
-}
-
-saturateV <- function(u, generatingVector, ro){
-  sum <- 0
-  for(i in seq(generatingVector)){
-    sum <- sum + multivariateStandardNormal(u, generatingVector[i], ro)
-  }
-  return(sum)
-}
-
-saturateU <- function(v, generatingVector, ro){
-  sum <- 0
-  for(i in seq(generatingVector)){
-    sum <- sum + multivariateStandardNormal(generatingVector[i], v, ro)
-  }
-  return(sum)
+  postscript("two-fifteen.ps", horizontal = FALSE)
+  plot(sample, xlab="37.2 + 6.8*U", ylab="39.4 + 7.7*V")
+  dev.off()                                        
+  
+  return(list(matrix=matrix,
+              sample=sample))
 }
 
 multivariateStandardNormal <- function(u, v, ro){

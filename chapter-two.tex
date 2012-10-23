@@ -122,7 +122,7 @@ viene rifiutata pertanto il misuratore non \`e correttamente
 calibrato.
 
 
-\begin{exercise}{(2.10 nel testo)}
+\begin{exercise}{\emph{(2.10 nel testo)}}
   Si studia un campione di 100 individui e si considera il numero di
   vegetariani.  Si sono osservati $r = 2$ vegetariani su $n = 100$
   prove (supposte Bernoulli indipendenti e identiche). Trovare
@@ -130,11 +130,17 @@ calibrato.
   vegetariani nella popolazione. Notare che l'intervallo ha il limite
   inferiore negativo. Calcolare anche l'intervallo di Agresti e Coull.
 \end{exercise}
-Questo il codice che implementa l'esercizio:
-\lstinputlisting{r-sources/exercises/chapter-two/two-ten.R} Osserviamo
-dall'output riportato sotto che l'intervallo di confidenza calcolato
-con il metodo asintotico ha l'intervallo inferiore negativo, mentre
-non \`e cos\`i per quello calcolato con la correzione Agresti-Coull.
+Questo il codice che implementa l'esercizio (abbiamo implementato
+manualmente il metodo con la correzione Agresti-Coull in quanto nella
+distribuzione di R con cui sono state svolte queste implementazioni
+non fornisce la libreria \texttt{binom} per poter usare la funzione
+\texttt{binom.confint}):
+\lstinputlisting{r-sources/exercises/chapter-two/two-ten.R}
+
+Osserviamo dall'output riportato sotto che l'intervallo di confidenza
+calcolato con il metodo asintotico ha l'intervallo inferiore negativo,
+mentre non \`e cos\`i per quello calcolato con la correzione
+Agresti-Coull. 
 \begin{lstlisting}
   > twoTen()
   $asymptotic
@@ -143,3 +149,58 @@ non \`e cos\`i per quello calcolato con la correzione Agresti-Coull.
   $AgrestiCoull
   [1] 0.001501869 0.075421208
 \end{lstlisting}
+
+\begin{exercise}{\emph{(2.13 nel testo)}}
+  (Newbold et al.) In un centro di ricerca si vuole condurre uno
+  studio sul costo medio dei biglietti del cinema. Si supponga che
+  $\sigma = 50$ centesimi. Quale dimensione del campione dovremmo
+  considerare per avere degli intervalli di confidenza del costo medio
+  di ampiezza uguale a 30 centesimi?
+\end{exercise}
+Supponiamo che gli $n$ dati osservati provengono da un campione di
+v.a. identiche e identicamente distribuite con media e varianza $\mu,
+\sigma$ rispettivamente. Possiamo utilizzare il teorema limite
+centrale e impostare la forma dell'intervallo $$\bar{Y} \pm
+z_{n,\frac{c}{2}}^{*}\frac{\sigma}{\sqrt{n}}$$ dove usiamo il quartile
+superiore della normale in quanto la deviazione standard \`e nota e
+non si deve ``spendere'' un grado di libert\`a utilizzando il relativo
+stimatore. Imponiamo la condizione sulla dimensione
+dell'intervallo:$$\bar{Y} +
+z_{n,\frac{c}{2}}^{*}\frac{\sigma}{\sqrt{n}} - \bar{Y} +
+z_{n,\frac{c}{2}}^{*}\frac{\sigma}{\sqrt{n}} = 30$$ da cui si arriva
+a $$n = \left (\frac{z_{n,\frac{c}{2}}^{*} \sigma}{15}\right )^2$$
+aiutandosi con R, supponendo che l'intervallo di confidenza di livello 95\%:
+\begin{lstlisting}
+  > (50*qnorm(p=.025, lower.tail=FALSE)/15)^2
+  [1] 42.68288
+\end{lstlisting}
+
+\begin{exercise}{\emph{(2.14 nel testo)}}
+  Si abbiano due variabili $X$ = et\`a della madre (anni), $Y$ = et\`a
+  del padre (anni) misurate in una popolazione molto grande di bambini
+  con la sindrome di Down. Si \`e trovato che la distribuzione
+  congiunta di queste due variabili \`e normale doppia con medie
+  $\mu_X = 37.2, \mu_Y = 39.4$, deviazioni standard $\sigma_X = 6.8,
+  \sigma_Y = 7.7$ e coefficiente di correlazione $\rho = 0.83$.
+  Trovare la covarianza tra le et\`a. Trovare l'et\`a media di una
+  madre se il padre ha 40 anni. Trovare l'et\`a media di un padre se
+  la madre ha 40 anni. Determinare la retta delle medie condizionate
+  $E(Y |X = x)$ nella popolazione.
+\end{exercise}
+
+\begin{exercise}\emph{(2.15 nel testo)}
+  Generare un campione casuale di 1000 osservazioni da una normale doppia con i
+  parametri dell'esercizio precedente. Usare i dati per stimare i parametri in modo
+  opportuno.  
+\end{exercise}
+Questo il codice che implementa l'esercizio:
+\lstinputlisting{r-sources/exercises/chapter-two/two-fifteen.R}
+L'esecuzione della funzione produce una rappresentazione del campione
+con 1000 coppie nella \autoref{fig:two-fifteen}, dove $(U, V)$ \`e una
+normale doppia standard.
+\begin{figure}[htb]
+\centering
+\includegraphics[height=13cm,width=13cm]{r-sources/exercises/chapter-two/two-fifteen.ps}
+\caption{Istogramma esercizio 2.15 del testo}
+\label{fig:two-fifteen}
+\end{figure}
