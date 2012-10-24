@@ -18,7 +18,12 @@ twoFifteen <- function(){
   sample <- matrix[rowIndicesForSample,]
 
   postscript("two-fifteen.ps", horizontal = FALSE)
-  plot(sample, xlab="37.2 + 6.8*U", ylab="39.4 + 7.7*V")
+  plot(sample, xlab="X = 37.2 + 6.8*U", ylab="Y = 39.4 + 7.7*V")
+  lines(sample[,1], 39.4 + 43.4588/(6.8^2)*(sample[,1]-37.2), col="red")
+  ## here simply we swap x and y datas in order to draw the curve
+  ## correctly (that is we have to switch the two axis in order to
+  ## have a meaningful plot)
+  lines(37.2 + 43.4588/(7.7^2)*(sample[,2]-39.4), sample[,2], col="blue")
   dev.off()                                        
   
   return(list(matrix=matrix,

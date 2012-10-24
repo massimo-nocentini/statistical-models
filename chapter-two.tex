@@ -187,20 +187,57 @@ aiutandosi con R, supponendo che l'intervallo di confidenza di livello 95\%:
   la madre ha 40 anni. Determinare la retta delle medie condizionate
   $E(Y |X = x)$ nella popolazione.
 \end{exercise}
+La covarianza campionaria si ricava dall'equazione
+\begin{displaymath}
+  \rho = \frac{S_{XY}}{S_X S_Y}
+\end{displaymath}
+Per i nostri dati abbiamo:
+\begin{lstlisting}
+  > covCampionaria <- .83 * 6.8 * 7.7
+  > covCampionaria
+  [1] 43.4588
+\end{lstlisting}
+Per le medie condizionate valgono le seguenti:
+\begin{displaymath}
+  \begin{split}
+    E(Y|X=x)=\bar{Y} + \frac{S_{XY}}{S_{XX}}(x - \bar{X})\\
+    E(X|Y=y)=\bar{X} + \frac{S_{XY}}{S_{YY}}(y - \bar{Y})
+  \end{split}
+\end{displaymath}
+Di conseguenza le richieste dell'esercizio sono date da:
+\begin{displaymath}
+  \begin{split}
+    E(Y|X=40)=39.4 + \frac{43.4588}{6.8^2}(40 - 37.2)\\
+    E(X|Y=40)=37.2 + \frac{43.4588}{7.7^2}(40 - 39.4)
+  \end{split}
+\end{displaymath}
+Calcolando:
+\begin{lstlisting}
+  > meanYGivenX <- 39.4 + 43.4588/(6.8^2)*(40-37.2)
+  > meanXGivenY <- 37.2 + 43.4588/(7.7^2)*(40-39.4)
+  > meanYGivenX
+  [1] 42.03159
+  > meanXGivenY
+  [1] 37.63979
+\end{lstlisting}
+
 
 \begin{exercise}\emph{(2.15 nel testo)}
-  Generare un campione casuale di 1000 osservazioni da una normale doppia con i
-  parametri dell'esercizio precedente. Usare i dati per stimare i parametri in modo
-  opportuno.  
+  Generare un campione casuale di 1000 osservazioni da una normale
+  doppia con i parametri dell'esercizio precedente. Usare i dati per
+  stimare i parametri in modo opportuno.
 \end{exercise}
 Questo il codice che implementa l'esercizio:
 \lstinputlisting{r-sources/exercises/chapter-two/two-fifteen.R}
-L'esecuzione della funzione produce una rappresentazione del campione
-con 1000 coppie nella \autoref{fig:two-fifteen}, dove $(U, V)$ \`e una
-normale doppia standard.
+L'esecuzione della funzione produce la \autoref{fig:two-fifteen} con
+una rappresentazione del campione di dimensione 1000 della variabile
+aleatoria $(X = 37.2 + 6.8U, Y = 39.4 + 7.7V)$ , dove $(U, V)$ \`e una
+normale doppia standard. Nella figura riportiamo lo scatter delle
+coppie generate, una curva in rosso per la retta delle medie
+$E(Y|X=x)$ e una curva in blu per la retta delle medie $E(X|Y=y)$.
 \begin{figure}[htb]
 \centering
 \includegraphics[height=13cm,width=13cm]{r-sources/exercises/chapter-two/two-fifteen.ps}
-\caption{Istogramma esercizio 2.15 del testo}
+\caption{Campione normale doppia $(X, Y)$, esercizio 2.15 del testo}
 \label{fig:two-fifteen}
 \end{figure}
