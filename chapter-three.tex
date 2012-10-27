@@ -1,0 +1,115 @@
+\begin{exercise}{\emph{(3.1 nel testo)}}
+  Per verificare quanto tempo impiega il poliestere a deteriorarsi in
+  una discarica, un ricercatore ha preso 10 strisce di poliestere e le
+  ha interrate. Cinque strisce scelte a caso sono state estratte dopo
+  due settimane e le restanti dopo 3 mesi. Su ogni striscia \`e stata
+  misurata la forza di rottura in libbre. Sono state ottenute le
+  statistiche seguenti.
+  \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      Gruppo & n & media & sd \\\hline
+      2 settimane & 5 & 123.8 & 4.6 \\
+      3 mesi & 5 & 116.4 & 16.09 \\ \hline
+    \end{tabular}
+  \end{table}
+  Costruire un intervallo di confidenza al 95\% per la differenza
+  delle medie assumendo la normalit\`a e l'omoschedasticit\`a.
+  Sottoporre a test l'ipotesi di uguaglianza delle medie.
+\end{exercise}
+Questo il codice che implementa l'esercizio:
+\lstinputlisting{r-sources/exercises/chapter-three/three-one.R} Nel
+campionamento ripetuto l'intervallo di confidenza riportato sotto
+conterr\`a il vero valore del parametro (differenza delle medie) con una
+probabilit\`a di copertura del 95\%.
+\begin{lstlisting}
+  > threeOne()
+  $tOss
+  [1] 0.9887817
+
+  $meansDifference
+  [1] 7.4
+
+  $confidenceInterval
+  [1] -9.858037 24.658037
+
+  $pValue
+  [1] 0.3517289
+\end{lstlisting}
+La differenza delle medie non \`e significativa pertanto si mantiene
+l'ipotesi che le due medie siano uguali e che il trattamento non ha
+avuto effetto.
+
+\begin{exercise}{\emph{(3.3) nel testo}}
+  I dati seguenti rappresentano i pesi di 20 uomini partecipanti a un
+  programma di perdita di peso, prima e dopo il programma.  Vogliamo
+  sapere se in media il programma ha avuto effetto. Fare un test
+  oppor- tuno esplicitando le assunzioni.
+\end{exercise}
+Non possiamo procedere allo studio della differenza delle medie
+campionarie dei due gruppi: i due campioni $Y=(Y_1, \ldots, Y_{20})$ e
+$Y' = (Y'_1, \ldots, Y'_{20})$ non sono indipendenti, in quanto $(Y_i,
+Y'_i)$ sono il peso della persona $i$-esima e quindi il modello non
+\`e applicabile direttamente.
+
+Per questo motivo costruiamo il campione $(Y_1-Y'_1, \ldots,
+Y_{20}-Y'_{20})$: questo nuovo oggetto viene costruito a partire dai
+campioni originari, tra loro indipendenti ma non identicamente
+distribuiti, piu' formalmente $(Y_1, \ldots, Y_{20})$ si suppone
+distribuito come $N(\mu_1, \sigma^2)$, mentre $(Y'_1, \ldots,
+Y'_{20})$ si suppone distribuito come $N(\mu_2, \sigma^2)$.
+
+Per tanto il campione differenza ha distribuzione campionaria data da
+$N(\bar{Y} - \bar{Y'}, var(Y) + var(Y') -2cov(Y, Y'))$, chiariamo la
+varianza:
+\begin{displaymath}
+  \begin{split}
+    var(Y - Y') &= var(Y + (-Y')) = var(Y) + (-1)^2var(Y') +
+    2cov(Y,-Y') \\
+    &= var(Y) + var(Y') + 2E\left((Y-E(Y))(-Y'-E(-Y')) \right) = \\
+    &= var(Y) + var(Y') + 2E\left((Y-E(Y))(-Y'+E(Y')) \right) = \\
+    &= var(Y) + var(Y') - 2E\left((Y-E(Y))(Y'-E(Y')) \right) = \\
+    &= var(Y) + var(Y') - 2cov(Y,Y')
+  \end{split}
+\end{displaymath}
+Questo il codice che implementa l'esercizio:
+\lstinputlisting{r-sources/exercises/chapter-three/three-three.R}
+Abbiamo fissato l'ipotesi nulla $H_0$ che la media del nuovo campione
+(ovvero delle differenze tra prima e dopo la dieta) sia uguale a 0 ad
+un livello del 95\%, con una ipotesi alternativa unilaterale (in
+quanto speriamo di avere una perdita di peso):
+\begin{lstlisting}
+> threeThree()
+$sample
+[1]  3.8 -5.5  8.9  0.0  8.0  5.2  7.7  7.5  5.0  0.8  0.0  2.6  9.0 -3.6  0.1
+[16]  0.5  2.0  0.0  0.9  0.0
+
+$automaticTest
+
+One Sample t-test
+
+data:  sample 
+t = 2.8734, df = 19, p-value = 0.004865
+alternative hypothesis: true mean is greater than 0 
+95 percent confidence interval:
+1.053314      Inf 
+sample estimates:
+mean of x 
+2.645 
+
+
+$empiricalMean
+[1] 2.645
+
+$tOss
+[1] 2.873404
+
+$confidenceInterval
+[1] 0.718348 4.571652
+
+$pValue
+[1] 0.004865231
+\end{lstlisting}
+La differenza \`e altamente significativa pertanto si rifiuta $H_0$ e
+il trattamento ha avuto effetto.

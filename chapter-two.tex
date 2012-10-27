@@ -1,4 +1,3 @@
-
 \begin{exercise}{\emph{(2.6 nel testo)}}
   Considerate il modello in cui $Y_1,\ldots, Y_n$ sono indipendenti e
   identicamente distribuite come una uniforme $Y \sim U(0, \theta)$,
@@ -220,7 +219,19 @@ Calcolando:
   > meanXGivenY
   [1] 37.63979
 \end{lstlisting}
-
+Un'osservazione: nell'esempio del testo per il calcolo delle medie
+condizionate si utilizza la seguente:
+\begin{displaymath}
+  E(Y|X=x)=\bar{Y} + \rho \frac{\sigma_Y}{\sigma_X}(x - \bar{X})
+\end{displaymath}
+che risulta utile quando non si conosce la covarianza ma solo il
+coefficiente di correlazione. E' equivalente in quanto:
+\begin{displaymath}
+  = \bar{Y} + \frac{\sigma_{XY}}{\sigma_X \sigma_Y}
+  \frac{\sigma_Y}{\sigma_X}(x - \bar{X})=
+  \bar{Y} +  \frac{\sigma_{XY}}{\sigma_X\sigma_X}(x - \bar{X})=
+  \bar{Y} +  \frac{\sigma_{XY}}{\sigma_{XX}}(x - \bar{X})
+\end{displaymath}
 
 \begin{exercise}\emph{(2.15 nel testo)}
   Generare un campione casuale di 1000 osservazioni da una normale
@@ -237,7 +248,8 @@ coppie generate, una curva in rosso per la retta delle medie
 $E(Y|X=x)$ e una curva in blu per la retta delle medie $E(X|Y=y)$.
 \begin{figure}[htb]
 \centering
-\includegraphics[height=13cm,width=13cm]{r-sources/exercises/chapter-two/two-fifteen.ps}
-\caption{Campione normale doppia $(X, Y)$, esercizio 2.15 del testo}
+\includegraphics[height=14cm,width=14cm]{r-sources/exercises/chapter-two/two-fifteen.ps}
+\caption{Campione da una normale doppia $(X, Y)$, esercizio 2.15 del testo}
 \label{fig:two-fifteen}
 \end{figure}
+
