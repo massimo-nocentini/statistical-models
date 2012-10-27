@@ -113,3 +113,40 @@ $pValue
 \end{lstlisting}
 La differenza \`e altamente significativa pertanto si rifiuta $H_0$ e
 il trattamento ha avuto effetto.
+
+\begin{exercise}
+  In un ospedale 485 pazienti sono stati sottoposti a due tipi di
+  chirurgia, ginecologica (Gruppo 1) e addominale (Gruppo 2), ed \`e
+  stata registrata la presenza successiva di complicazioni
+  postoperatorie. Costruire un intervallo di confidenza per la
+  differenza delle proporzioni. Sottoporre a test che non ci siano
+  differenze tra i due gruppi.
+\end{exercise}
+Si implementa direttamente:
+\begin{lstlisting}
+  > prop.test(c(235, 210), c(240, 245), correct = FALSE, conf.level = 0.95, alternative = "two.sided")
+
+	2-sample test for equality of proportions without continuity
+	correction
+
+data:  c(235, 210) out of c(240, 245) 
+X-squared = 23.8555, df = 1, p-value = 1.038e-06
+alternative hypothesis: two.sided 
+95 percent confidence interval:
+ 0.07462716 0.16942046 
+sample estimates:
+   prop 1    prop 2 
+0.9791667 0.8571429 
+
+> zOss <- sqrt(23.8555)
+> zOss
+[1] 4.884209
+\end{lstlisting}
+L'intervallo di confidenza al livello 95\% per la differenza di
+proporzioni \`e $(0.075, 0.17)$: quest'intervallo delimita
+l'incremento nella probabilit\`a di non avere complicazioni
+postoperatorie per pazienti sottoposti alla chirurgia
+addominale. Inoltre la differenza \`e altamente significativa, si
+rifiuta l'ipotesi nulla $H_0$ che non vi sia differenza tra le due
+proporzioni, quindi la domanda iniziale ``la chirurgia ginecologica ha
+meno complicazioni postoperatorie'' ha risposta affermativa.
