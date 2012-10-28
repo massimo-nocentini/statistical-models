@@ -114,20 +114,31 @@ $pValue
 La differenza \`e altamente significativa pertanto si rifiuta $H_0$ e
 il trattamento ha avuto effetto.
 
-\begin{exercise}
+\begin{exercise}{\emph{(3.4 nel testo)}}
   In un ospedale 485 pazienti sono stati sottoposti a due tipi di
   chirurgia, ginecologica (Gruppo 1) e addominale (Gruppo 2), ed \`e
   stata registrata la presenza successiva di complicazioni
-  postoperatorie. Costruire un intervallo di confidenza per la
+  postoperatorie.
+  \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      operaz./compl. & no & si & totale \\\hline
+      ginecologica & 235 & 5 & 240 \\
+      addominale & 210 & 35 & 245 \\ \hline
+    \end{tabular}
+  \end{table}
+  Costruire un intervallo di confidenza per la
   differenza delle proporzioni. Sottoporre a test che non ci siano
   differenze tra i due gruppi.
 \end{exercise}
 Si implementa direttamente:
 \begin{lstlisting}
-  > prop.test(c(235, 210), c(240, 245), correct = FALSE, conf.level = 0.95, alternative = "two.sided")
+  > prop.test(c(235, 210), c(240, 245), correct = FALSE,
+  conf.level = 0.95, alternative = "two.sided")
 
-	2-sample test for equality of proportions without continuity
-	correction
+  2-sample test for equality of proportions without
+  continuity correction
 
 data:  c(235, 210) out of c(240, 245) 
 X-squared = 23.8555, df = 1, p-value = 1.038e-06
@@ -146,7 +157,97 @@ L'intervallo di confidenza al livello 95\% per la differenza di
 proporzioni \`e $(0.075, 0.17)$: quest'intervallo delimita
 l'incremento nella probabilit\`a di non avere complicazioni
 postoperatorie per pazienti sottoposti alla chirurgia
-addominale. Inoltre la differenza \`e altamente significativa, si
+ginecologica. Inoltre la differenza \`e altamente significativa, si
 rifiuta l'ipotesi nulla $H_0$ che non vi sia differenza tra le due
 proporzioni, quindi la domanda iniziale ``la chirurgia ginecologica ha
 meno complicazioni postoperatorie'' ha risposta affermativa.
+
+\begin{exercise}{\emph{(3.5 nel testo)}}
+  La mancata risposta nelle indagini campionarie puo' variare in base
+  al periodo dell'anno. L'ISTAT ha analizzato il numero di chiamate su
+  un numero telefonico attivo che non hanno avuto risposta in due
+  inchieste telefoniche, la prima svolta da gennaio ad aprile e la
+  seconda svolta dal 1 luglio al 31 agosto.
+  \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|}
+      \hline
+      periodo & chiamate totali & Senza risposta \\\hline
+      1/1 - 14/4 & 1558 & 333 \\
+      1/7 - 31/8 & 2075 & 861  \\ \hline
+    \end{tabular}
+  \end{table}
+  Di quanto \`e superiore la proporzione di chiamate senza risposta
+  nel secondo periodo rispetto al primo periodo? Trovare un intervallo
+  di confidenza al 99\%.  
+\end{exercise}
+Prima di applicare uno dei modelli per il confronto dei due gruppi
+manipoliamo la matrice iniziale in modo da poter rispondere alla
+domanda posta, scambiando le due righe, le due colonne e esplicitando
+i successi e gli insuccessi (in quanto vogliamo identificare come
+``successi'' le \emph{chiamate senza risposta}), ottenendo:
+  \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|}
+      \hline
+      periodo & senza risposta & con risposta\\\hline
+      1/7 - 31/8 & 861 & 1214 \\
+      1/1 - 14/4 & 333 & 1225 \\\hline
+    \end{tabular}
+  \end{table}
+  Adesso possiamo studiare il log del rapporto delle quote in quanto
+  invariante a scambio di righe e colonne (quello che abbiamo appena
+  fatto sopra). Questa la funzione che implementa l'esercizio:
+  \lstinputlisting{r-sources/exercises/chapter-three/three-five-automatic-oddsRation.R}
+  Otteniamo i seguenti risultati:
+  \begin{lstlisting}
+    > threeFiveAutomatic(rbind(c(861, 2075 - 861), c(333, 1558 - 333)))
+    $matrix
+    [,1] [,2]
+    [1,]  861 1214
+    [2,]  333 1225
+
+    $confidenceIntervalOddsRatio
+    [1] 2.144327 3.174400
+
+    $confidenceIntervalRisk
+    [1] 1.595596 2.362074
+\end{lstlisting}
+L'intervallo di confidenza al 99\% \`e $(2.14, 3.17)$. Per il calcolo
+dell'intervallo per il rischio relativo abbiamo usato l'identit\`a:
+\begin{displaymath}
+  RR = OR\frac{1-p_1}{1-p_2}
+\end{displaymath}
+Il rishio di chiamate \emph{senza} risposta nel periodo estivo varia
+da 1.6 a 2.4 volte rispetto al rischio nel periodo invernale (infatti
+\`e coerente che il numero di successi, dove per successo
+identifichiamo una chiamata \emph{senza} risposta con questa matrice,
+sia diverso). Possiamo concludere che con questa matrice \textbf{\`e
+  possibile} apprezzare la relazione che intercorre tra i due gruppi
+rispetto alle chiamate \emph{senza} risposta.
+
+\`E interessante fare un confronto con la matrice originale:
+\begin{lstlisting}
+  > threeFiveAutomatic(rbind(c(1558 - 333, 333), c(2075 - 861, 861)))
+  $matrix
+  [,1] [,2]
+  [1,] 1225  333
+  [2,] 1214  861
+
+  $confidenceIntervalOddsRatio
+  [1] 2.144327 3.174400
+
+  $confidenceIntervalRisk
+  [1] 1.104543 1.635134 
+\end{lstlisting}
+Osserviamo che l'intervallo per gli \emph{odd ratio} \`e uguale
+(infatti gli odd ratio sono invarianti per rivoluzioni di matrice,
+come abbiamo ricordato prima), mentre l'intervallo per i rischi
+cambia: adesso dobbiamo interpretare che il rischio di avere chiamate
+\emph{con} risposta nel periodo invernale varia da 1.1 a 1.6 volte
+rispetto al rischio nel periodo estivo (infatti \`e coerente che il
+numero di successi, dove per successo identifichiamo una chiamata
+\emph{con} risposta con questa matrice, sia approssimativamente
+uguale). Possiamo concludere che con questa matrice \textbf{non \`e
+  possibile} apprezzare la relazione che intercorre tra i due gruppi
+rispetto alle chiamate \emph{con} risposta.
