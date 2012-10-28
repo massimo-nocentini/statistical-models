@@ -1,5 +1,6 @@
 threeFiveAutomatic <- function(m){
-  oddsRatioInfo <- oddsratio(x)
+  library(vcd)
+  oddsRatioInfo <- oddsratio(m)
   summary <- summary(oddsRatioInfo)
 
   ## Log Odds Ratio Std. Error z value  Pr(>|z|)    
@@ -13,6 +14,7 @@ threeFiveAutomatic <- function(m){
                           logOddsRatioEstimator + superiorQuart*asymptoticError)
   return(list(
            matrix=m,
+           summary=summary,
            confidenceIntervalOddsRatio=exp(confidenceInterval),
            confidenceIntervalRisk=exp(confidenceInterval)*
            (1-m[1,1]/(m[1,1]+m[1,2]))/(1-m[2,1]/(m[2,1]+m[2,2]))))

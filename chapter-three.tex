@@ -251,3 +251,167 @@ numero di successi, dove per successo identifichiamo una chiamata
 uguale). Possiamo concludere che con questa matrice \textbf{non \`e
   possibile} apprezzare la relazione che intercorre tra i due gruppi
 rispetto alle chiamate \emph{con} risposta.
+
+\begin{exercise}{\emph{(3.11 nel testo)}}
+  Un famoso studio della fine degli anni 80 ad Harvard consider\`o due
+  campioni indipendenti di medici maschi e per 5 anni ogni
+  partecipante prese regolarmente una dose di aspirina o un placebo
+  (con assegnazione randomizzata e l'individuo trattato non conosceva
+  il trattamento). Alla fine dello studio si registro' la presenza o
+  l'assenza di infarto al miocardio. I risultati furono i seguenti:
+  \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|}
+      \hline
+      gruppo & infarto & no infarto \\\hline
+      Placebo & 189 & 10845 \\
+      Aspirina & 104 & 10933  \\ \hline
+    \end{tabular}
+  \end{table}
+  Lo studio voleva verificare se l'assunzione regolare di aspirina
+  riduce la mortalit\`a per malattia cardiovascolare. Di che tipo di
+  schema di campionamento si tratta?  Perch\`e?
+\end{exercise}
+
+Si tratta di campionamento \emph{prospettivo} in quanto i campioni
+sono stati creati per applicare il trattamento a due livelli
+\{aspirina, placebo\}, i totali riga $a + c$ e $b + d$ sono fissati.
+\begin{lstlisting}
+  > matrix <- rbind(c(189,10845), c(104, 10933))
+  > threeFiveAutomatic(matrix)
+  $matrix
+  [,1]  [,2]
+  [1,]  189 10845
+  [2,]  104 10933
+
+  $summary
+       Log Odds Ratio Std. Error z value  Pr(>|z|)    
+  [1,]        0.60544    0.12260  4.9384 3.938e-07 ***
+
+  $confidenceIntervalOddsRatio
+  [1] 1.335957 2.512372
+
+  $confidenceIntervalRisk
+  [1] 1.325564 2.492827
+\end{lstlisting}
+Vediamo che i due intervalli per $OR$ e $RR$ sono simili pertanto
+concludiamo che il rischio d'infarto per i soggetti al trattamento
+placebo varia da 1.3 a 2.5 volte il rischio d'infarto per i soggetti
+al trattamento aspirina.
+
+\begin{exercise}{\emph{(3.12 nel testo)}}
+  Nell'indagine GSS (General Social Survey) negli Stati Uniti (anno
+  2000), ai partecipanti venne chiesto se, per ridurre l'inquinamento
+  ambientale, erano disposti a pagare piu' tasse ed erano disposti a
+  ridurre il loro tenore di vita. Dalle risposte alle due domande
+  venne costruita la tabella seguente:
+  \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|}
+      \hline
+       & ridurre tenore si & ridurre tenore no \\\hline
+      pi\`u tasse si & 227 & 132 \\
+      pi\`u tasse no & 107 & 678  \\ \hline
+    \end{tabular}
+  \end{table}
+  Di che tipo di schema di campionamento si tratta? Perche'?
+\end{exercise}
+Si tratta di campionamento \emph{casuale} in quanto solo il totale $a
++ b + c + d$ \`e fissato.
+\begin{lstlisting}
+  > matrix <- rbind(c(227, 132), c(107, 678))
+> threeFiveAutomatic(matrix)
+$matrix
+     [,1] [,2]
+[1,]  227  132
+[2,]  107  678
+
+$summary
+     Log Odds Ratio Std. Error z value  Pr(>|z|)    
+[1,]        2.38847    0.15073  15.846 < 2.2e-16 ***
+
+$confidenceIntervalOddsRatio
+[1]  7.390659 16.066177
+
+$confidenceIntervalRisk
+[1] 3.146318 6.839620
+
+> threeFiveAutomatic(t(matrix))
+$matrix
+     [,1] [,2]
+[1,]  227  107
+[2,]  132  678
+
+$summary
+     Log Odds Ratio Std. Error z value  Pr(>|z|)    
+[1,]        2.38847    0.15073  15.846 < 2.2e-16 ***
+
+$confidenceIntervalOddsRatio
+[1]  7.390659 16.066177
+
+$confidenceIntervalRisk
+[1] 2.828628 6.149010
+
+\end{lstlisting}
+Come si vede dal codice sopra, non vi \`e molta differenza fra gli
+intervalli dei rischi se si scambia il ruolo delle due variabili.
+
+\begin{exercise}{\emph{(3.13 nel testo)}}
+  In uno studio sulla relazione tra l'operazione alle tonsille (causa
+  potenziale) e il linfoma di Hodgkin (eetto) si sono considerati un
+  campione di soggetti con il linfoma e un campione di soggetti non
+  malati e si sono quindi classificati i soggetti a seconda che
+  avessero o non avessero avuto l'operazione alle tonsille. I dati
+  sono i seguenti:
+  \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|}
+      \hline
+       & linfoma si & linfoma no \\\hline
+      operazione si & 90 & 165 \\
+      operazione no & 84 & 307  \\ \hline
+    \end{tabular}
+  \end{table}
+  Di che tipo di schema di campionamento si tratta? Perche'?
+\end{exercise}
+Si tratta di campionamento \emph{retrospettivo} in quanto i dati
+provengono da due campioni costruiti da due popolazioni di soggetti
+con il linfoma e non. I totali colonna $a + b$ e $c + d$ sono fissi.
+\begin{lstlisting}
+> matrix <- rbind(c(90, 165), c(84, 307))
+> threeFiveAutomatic(t(matrix))
+$matrix
+     [,1] [,2]
+[1,]   90   84
+[2,]  165  307
+
+$summary
+     Log Odds Ratio Std. Error z value  Pr(>|z|)    
+[1,]        0.68990    0.17938  3.8459 6.005e-05 ***
+
+$confidenceIntervalOddsRatio
+[1] 1.255877 3.164376
+
+$confidenceIntervalRisk
+[1] 0.9321394 2.3486687
+
+> threeFiveAutomatic(matrix)
+$matrix
+     [,1] [,2]
+[1,]   90  165
+[2,]   84  307
+
+$summary
+     Log Odds Ratio Std. Error z value  Pr(>|z|)    
+[1,]        0.68990    0.17938  3.8459 6.005e-05 ***
+
+$confidenceIntervalOddsRatio
+[1] 1.255877 3.164376
+
+$confidenceIntervalRisk
+[1] 1.034974 2.607776
+\end{lstlisting}
+Vediamo che i due intervalli per $OR$ e $RR$ sono simili pertanto
+concludiamo che il rischio di aver avuto l'operazione per i soggetti
+malati varia da .9 a 2.4 volte il rischio di aver avuto l'operazione
+per i soggetti sani.
