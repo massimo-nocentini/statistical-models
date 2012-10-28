@@ -252,6 +252,59 @@ uguale). Possiamo concludere che con questa matrice \textbf{non \`e
   possibile} apprezzare la relazione che intercorre tra i due gruppi
 rispetto alle chiamate \emph{con} risposta.
 
+\begin{exercise}{\emph{(3.7 nel testo)}}
+  Una campagna per la sicurezza stradale ha fornito le seguenti
+  informazioni:
+  \begin{itemize}
+  \item l'80\% delle vittime stradali sono pedoni o motociclisti
+  \item l'87\% degli incidenti mortali \`e causato da chi ha pi\`u di
+    25 anni.
+  \end{itemize}
+  Tradurre la prima aermazione in una probabilit\`a appropriata. Quale
+  delle probabilit\`a
+\begin{itemize}
+\item P(causa di incidente mortale | et\`a > 25) = 0.87
+\item P(et\`a > 25 | causa di incidente mortale) = 0.87
+\item P(causa di incidente mortale $\cap$ et\`a > 25) = 0.87
+\end{itemize}
+si puo' applicare alla seconda affermazione?  Se si definisse una
+tabella 2$\times$ 2 che incrocia le due variabili seguenti si puo'
+individuare una variabile risposta? Secondo voi che schema di
+campionamento \`e stato usato per ottenere il dato 87\%? Dove
+inserireste la proporzione 87\% nella tabella? dove inserireste il
+valore 100\%?
+\end{exercise}
+La prima affermazione possiamo scriverla come P(Pedone($\omega$)=1 $\cup$
+Moto($\omega$)=1 | Vittima($\omega$)=1) = 80\%, con uno spazio $\Omega =
+\{ \omega : \omega \textsf{ \`e una persona} \}$ e Pedona, Moto,
+Vittima variabili aleatorie binarie.
+  \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      & $>25$ & $\leq 25$ &\\\hline
+      $M$ & $P(>25)P(M| >25)$ & $P(\leq25)P(M|\leq25)$ & $P(M)$ \\
+      $\bar{M}$ & $P(>25)P(\bar{M}| >25)$ & $P(\leq25)P(\bar{M}|\leq25)$ & $P(\bar{M})$ \\
+      \hline
+    \end{tabular}
+  \end{table}
+Se sappiamo che l'87\% degli incidenti \`e causato da et\`a $> 25$
+allora abbiamo che $P(>25 \cap M) = P(>25)P(M| >25) = 87\%$, abbiamo
+  \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      & $>25$ & $\leq 25$ &\\\hline
+      $M$ & $87\%$ & $P(\leq25)P(M|\leq25)$ & $P(M)$ \\
+      $\bar{M}$ & $P(>25)P(\bar{M}| >25)$ &
+      $P(\leq25)P(\bar{M}|\leq25)$ & $P(\bar{M})$ \\
+      \hline
+      & & & 1 \\
+      \hline
+    \end{tabular}
+  \end{table}
+
+
 \begin{exercise}{\emph{(3.11 nel testo)}}
   Un famoso studio della fine degli anni 80 ad Harvard consider\`o due
   campioni indipendenti di medici maschi e per 5 anni ogni
@@ -263,7 +316,7 @@ rispetto alle chiamate \emph{con} risposta.
     \centering
     \begin{tabular}{|c|c|c|}
       \hline
-      gruppo & infarto & no infarto \\\hline
+       & infarto & no infarto \\\hline
       Placebo & 189 & 10845 \\
       Aspirina & 104 & 10933  \\ \hline
     \end{tabular}
