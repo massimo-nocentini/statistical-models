@@ -278,32 +278,61 @@ La prima affermazione possiamo scriverla come P(Pedone($\omega$)=1 $\cup$
 Moto($\omega$)=1 | Vittima($\omega$)=1) = 80\%, con uno spazio $\Omega =
 \{ \omega : \omega \textsf{ \`e una persona} \}$ e Pedona, Moto,
 Vittima variabili aleatorie binarie.
+
+Se sappiamo che l'87\% degli incidenti \`e causato da et\`a $> 25$
+allora abbiamo che $P(M| >25) = 87\%$, per tanto possiamo impostare la
+tabella nel modo pi\`u generico e poi ragionare:
   \begin{table}[h]              % 'h' for 'here' position
     \centering
     \begin{tabular}{|c|c|c|c|}
       \hline
       & $>25$ & $\leq 25$ &\\\hline
       $M$ & $P(>25)P(M| >25)$ & $P(\leq25)P(M|\leq25)$ & $P(M)$ \\
-      $\bar{M}$ & $P(>25)P(\bar{M}| >25)$ & $P(\leq25)P(\bar{M}|\leq25)$ & $P(\bar{M})$ \\
-      \hline
-    \end{tabular}
-  \end{table}
-Se sappiamo che l'87\% degli incidenti \`e causato da et\`a $> 25$
-allora abbiamo che $P(>25 \cap M) = P(>25)P(M| >25) = 87\%$, abbiamo
-  \begin{table}[h]              % 'h' for 'here' position
-    \centering
-    \begin{tabular}{|c|c|c|c|}
-      \hline
-      & $>25$ & $\leq 25$ &\\\hline
-      $M$ & $87\%$ & $P(\leq25)P(M|\leq25)$ & $P(M)$ \\
       $\bar{M}$ & $P(>25)P(\bar{M}| >25)$ &
       $P(\leq25)P(\bar{M}|\leq25)$ & $P(\bar{M})$ \\
       \hline
-      & & & 1 \\
+      & $P(>25)$ & $P(\leq 25)$ &\\
       \hline
     \end{tabular}
   \end{table}
 
+  Dato che il valore 87\% deve comparire in una cella e abbiamo
+  fissato che $P(M| >25) = 87\%$, allora possiamo costruire la tabella
+  marginale rispetto all'et\`a:
+  \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|}
+      \hline
+      & $>25$ & $\leq 25$ \\\hline
+      $M$ & $\frac{P(>25)P(M| >25)}{P(>25)}$ & $\frac{P(\leq25)P(M|\leq25)}{P(\leq25)}$ \\
+      $\bar{M}$ & $\frac{P(>25)P(\bar{M}| >25)}{P(>25)}$ &
+      $\frac{P(\leq25)P(\bar{M}|\leq25)}{P(\leq25)}$ \\
+      \hline
+      & $1$ & $1$ \\
+      \hline
+    \end{tabular}
+  \end{table}
+
+  Semplificando otteniamo:
+    \begin{table}[h]              % 'h' for 'here' position
+    \centering
+    \begin{tabular}{|c|c|c|}
+      \hline
+      & $>25$ & $\leq 25$ \\\hline
+      $M$ & $87\%$ & $P(M|\leq25)$ \\
+      $\bar{M}$ & $P(\bar{M}| >25)$ &
+      $P(\bar{M}|\leq25)$ \\
+      \hline
+      & $1$ & $1$ \\
+      \hline
+    \end{tabular}
+  \end{table}
+
+  Abbiamo quindi che i totali colonna $a + b$ e $c + d$ sono fissi e
+  possiamo supporre che il campionamento \`e stato effettuato con uno
+  schema retrospettivo (coerente con l'intuizione che non sarebbe
+  stato possibile somministrare il trattamento ``incidente mortale''
+  nel caso di un campionamento prospettivo).
 
 \begin{exercise}{\emph{(3.11 nel testo)}}
   Un famoso studio della fine degli anni 80 ad Harvard consider\`o due
