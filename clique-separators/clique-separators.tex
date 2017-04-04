@@ -180,11 +180,12 @@ $\leftrightarrow$ $\lbrace c_{i}, c_{j} \rbrace \in E$ for all $c_{i}\neq c_{j}\
 \end{frame}
 
 \begin{frame}{defs}
-A cycle $\alpha = (v_{0}, v_{1}, \ldots, v_{k-1}, v_{0})$ of length $k$ has a
-\textit{chord} if $\lbrace v_{i},v_{i+j} \rbrace\in E$ where $j>1$
+let $\alpha = (v_{0}, v_{1}, \ldots, v_{k-1}, v_{0})$ be a cycle of length $k$
 \vfill
-A graph $G$ is \textit{chordal} if every cycle $\alpha$ of length $k\geq 4$ has
-a chord
+$\alpha$ has a \textit{chord} if $\lbrace v_{i},v_{i+j} \rbrace\in E$ where
+$j>1$, for some $i<k$
+\vfill
+$G=(V, E)$ is \textit{chordal} if every cycle $\alpha$ of length $k\geq 4$ has a chord
 \vfill
 a bijection $\pi: V \rightarrow  \lbrace 0, \ldots, n-1 \rbrace$  is an
 \textit{elimination ordering} for $G$
@@ -224,18 +225,63 @@ let $F_{\pi} = \left\lbrace \lbrace u, v \rbrace \not\in E:
 \begin{theorem}
 $\pi$ elimination ordering for $G$ is perfect $\leftrightarrow$ $G$ is chordal
 \end{theorem}
+\begin{proof}
+$(\leftarrow)$ By hp, every cycle $(u, w_{0}, \ldots, w_{k-1}, v, u)$ in $G$ has a chord, 
+so for each smallest cycle $(u, w, z, v)$ such that
+$\pi(w),\pi(z)<\min{\lbrace\pi(u), \pi(v)\rbrace}$ exists either $ \lbrace u,z
+\rbrace\in E$ or $ \lbrace w,v \rbrace\in E$, hence $F_{\pi}=\emptyset$.
+\vfill
+$(\rightarrow)$ By hp, $G=G_{\pi}$ because $F_{\pi}=\emptyset$, so for every
+path $(u, w_{0}, \ldots, w_{k-1}, v)$ such that $\pi(w_{j})< \min{ \lbrace \pi(u), \pi(v) \rbrace}$
+exists $ \lbrace u, v \rbrace\in E$. Hence exists $ \lbrace u, w_{i} \rbrace\in
+E$ chord for cycle $(u, w_{0}, \ldots, w_{k-1}, v, u)$, making $G$ chordal.
+
+\end{proof}
+\end{frame}
+
+\begin{frame}{thms}
 \begin{theorem}
 let $\pi$ elimination ordering for $G$ be minimal in: 
 \begin{center}
 $C$ is a clique separator for $G$ $\rightarrow$ $CC_{G(V\setminus C)}(u) =
 CC_{G(V\setminus C)}(v)$
 \end{center}
-
 for all $ \lbrace u, v \rbrace \in F_{\pi}$ and $CC_{G}(w)= \lbrace z\in V:
     (w,\ldots,z) \text{\small\,is a path in } G \rbrace$
 \end{theorem}
+\begin{proof}
+By contraposition, exists $ \lbrace u, v \rbrace\in F_{\pi}$ such that
+\begin{center}
+$C$ \textit{is not} a clique separator for $G$ $\leftarrow$ $CC_{G(V\setminus C)}(u)\neq 
+CC_{G(V\setminus C)}(v)$
+\end{center}
+Assume not, so let $C= \lbrace a, b, v \rbrace$ be a clique separator for $G$,
+where $a, b\in CC_{G(V\setminus C)}(u)$ and let $ \lbrace a, u \rbrace\in E$, wlog.
+$(u, a, b, v, u)$ is a smallest cycle in $G$ through $C$ with chord $ \lbrace a, v \rbrace$, 
+therefore $G$ is chordal, hence $G=G_{\pi}$ so $F_{\pi}=\emptyset \not\ni \lbrace u, v \rbrace$,
+a contraddiction.
+\end{proof}
 \end{frame}
 
+\begin{frame}{decomposition}
+compute $\pi$ elimination ordering for $G=(V, E)$
+\vfill
+let $C_{\pi}(v) =  \lbrace w \in V : \pi(v) < \pi(w) \wedge  \lbrace v, w \rbrace \in E\cup F_{\pi} \rbrace$ in
+$$D(G, v) = \left\lbrace\begin{array}{ll}
+            G(B_{\pi}(v)\cup C_{\pi}(v)) & \text{if } C_{\pi}(v) \text{ is a clique}\\
+            G & \text{otherwise} \\
+           \end{array}\right.$$
+where $B_{\pi}(v) = V\setminus \left(C_{\pi}(v)\cup A_{\pi}(v)\right)$
+and $A_{\pi}(v) = CC_{G\left(V\setminus C_{\pi}(v)\right)}(v)$.
+\vfill
+%if $D(G, v)$ returns when $C_{\pi}(v)$ is a clique, then $C_{\pi}(v)$ is a \emph{clique separator}
+if $D(G, v) = G$ then  $C_{\pi}(v)$ is a \emph{clique separator},\\
+so decompose $G$ into $G(A_{\pi}(v) \cup C_{\pi}(v))$ and $G(B_{\pi}(v) \cup C_{\pi}(v))$.
+\vfill
+\begin{block}{Python code}
+\textit{functools.reduce}(D, \textit{sorted}($V$, key=$\pi$), $G$)
+\end{block}
+\end{frame}
 
 \section*{Summary}
 
@@ -264,7 +310,7 @@ for all $ \lbrace u, v \rbrace \in F_{\pi}$ and $CC_{G}(w)= \lbrace z\in V:
   
 
 \begin{frame}{ }
-\Huge enjoy \smiley 
+\Huge \smiley
 \end{frame}
 
 \end{document}
