@@ -146,7 +146,7 @@ disconnects the graph.
     separators}\\{\footnotesize by Robert E. Tarjan, Discrete Mathematics, Volume 55,
     Issue 2, July 1985}
     \item understand the fundamental idea of \textit{vertex elimination order}
-    \item provide a prototype implemented in Python 
+    \item write a Python one-liner
 \end{itemize}
 \end{block}
 
@@ -283,29 +283,20 @@ so decompose $G$ into $G(A_{\pi}(v) \cup C_{\pi}(v))$ and $G(B_{\pi}(v) \cup C_{
 \end{block}
 \end{frame}
 
-\section*{Summary}
-
-\begin{frame}{Summary}
-
-  % Keep the summary *very short*.
-  \begin{block}{Key points}
-      \begin{itemize}
-      \item split $F(t)$ in $F^{[\mathfrak{p}]}(x,y)$ to account for bits $1$ and $0$
-      \item ${{R}^{[\mathfrak{p}]}}$ and ${{R}^{[\bar{\mathfrak{p}]}}}$ are both RA
-      $\leftrightarrow$  $\mathfrak{p}$ is a Riordan pattern.
-      \item requiring $|w|_{0}\leq|w|_{1}$ entails
-          \begin{displaymath}
-          \begin{split}
-          S^{[\mathfrak{p}]}(t)&=R^{[\mathfrak{p}]}(t,1)\rightarrow 
-            [t^{n}]S^{[\mathfrak{p}]}(t)= \left|\left\lbrace w \in  \mathcal{L}^{[\mathfrak{p}]}:
-                \begin{array}{l} |w|_{1} = n \\ |w|_{0}\leq|w|_{1} \end{array}\right\rbrace\right|\\
-          L^{[\mathfrak{p}]}(t)&=R^{[\mathfrak{p}]}\left(t^2,\frac{1}{t}\right)\rightarrow
-            [t^{n}]L^{[\mathfrak{p}]}(t)= \left|\left\lbrace w \in  \mathcal{L}^{[\mathfrak{p}]}:
-                \begin{array}{l} |w| = n \\ |w|_{0}\leq|w|_{1} \end{array}\right\rbrace\right|\\
-          \end{split}
-          \end{displaymath}
-      \end{itemize}
-  \end{block}
+\begin{frame}{facts}
+the algorithm is both \textit{correct} and \textit{complete}
+\vfill
+it has complexity $O(nm)$, where $n=|V|$ and $m=|E|$:
+\begin{itemize}
+    \item computing $\pi$ minimal ordering requires $O(nm)$
+    \item computing $C_{\pi}$ reduces to $F_{\pi}$, which requires $O(n^{2})$
+    \item folding for each $v\in V$ requires $O(m)$
+\end{itemize}
+\vfill
+the binary tree representing cliques and decompositions is as \textit{skewed} as possible
+\vfill
+this problem relates to, and can be used to solve, other problems:
+\textit{minimum fill-in, maximum clique, graph coloring, maximum independent sets}
 \end{frame}
   
 
