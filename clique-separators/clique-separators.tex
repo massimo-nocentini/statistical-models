@@ -72,8 +72,8 @@
 % - Use the \inst command only if there are several affiliations.
 % - Keep it simple, no one is interested in your street address.
 
-\date[Short Occasion] % (optional)
-{\today}
+\date[Short Occasion]{\today}
+
 
 \subject{
 This talk has an educational purpose to understand concepts explored in the
@@ -206,14 +206,63 @@ let $F_{\pi} = \left\lbrace \lbrace u, v \rbrace \not\in E:
 \end{itemize}
 \end{frame}
 
+\begin{frame}{$\pi$ and $\mathcal{M}^{n\times n}$}
+represent $A\in\mathcal{M}^{n\times n}$ with a graph $G=(V, E)$
+where $V= \lbrace x_{0}, \ldots, x_{n-1} \rbrace$ namely the \textit{vars}, and $
+\lbrace x_{i}, x_{j} \rbrace\in E \leftrightarrow a_{ij} \neq 0$
+\vfill
+\textit{Gauss elimination} according to $\pi$, it depends on the
+\emph{sparseness} of $A$
+\vfill
+$\rightarrow_{x_{i}}$ denotes the elimination of var $x_{i}$, so let \\
+$\quad G_{x_{i}}=(V\setminus  \lbrace x_{i}
+\rbrace, E \cup \lbrace   \lbrace x_{j}, x_{k} \rbrace : \lbrace x_{i}, x_{j}
+\rbrace \in E \wedge \lbrace x_{i}, x_{k} \rbrace\in E\rbrace)$
+\begin{displaymath}
+\footnotesize
+\left[
+\begin{array}{ccccc}
+a_{00} & a_{01}& a_{02}& a_{03}& a_{04}\\
+a_{10} & a_{11}& 0 & 0 & 0 \\
+a_{20} & 0 & a_{22}& 0 & 0 \\
+a_{30} & 0 & 0 & a_{33}& 0 \\
+a_{40} & 0 & 0 & 0 & a_{44}\\
+\end{array}\right] \rightarrow_{x_{0}}
+\left[\begin{array}{cccc}
+a_{11}^{'} & a_{12}^{'}& a_{13}^{'}& a_{14}^{'}\\
+a_{21}^{'} & a_{22}^{'}& a_{23}^{'}& a_{24}^{'}\\
+a_{31}^{'} & a_{32}^{'}& a_{33}^{'}& a_{34}^{'}\\
+a_{41}^{'} & a_{42}^{'}& a_{43}^{'}& a_{44}^{'}\\
+\end{array}\right]
+\end{displaymath}
+\begin{displaymath}
+\footnotesize
+\left[
+\begin{array}{ccccc}
+a_{00} & a_{01}& a_{02}& a_{03}& a_{04}\\
+a_{10} & a_{11}& 0 & 0 & 0 \\
+a_{20} & 0 & a_{22}& 0 & 0 \\
+a_{30} & 0 & 0 & a_{33}& 0 \\
+a_{40} & 0 & 0 & 0 & a_{44}\\
+\end{array}\right] \rightarrow_{x_{1}}
+\left[\begin{array}{cccc}
+a_{00}^{'} & a_{02}& a_{03}& a_{04}\\
+a_{21} & a_{22}& 0 & 0 \\
+a_{31} & 0 & a_{33}& 0 \\
+a_{41} & 0 & 0 & a_{44}\\
+\end{array}\right]
+\end{displaymath}
+\end{frame}
+
+
 \begin{frame}{approach}
 \begin{itemize}
-    \item \textit{divide and conquer}: decompose $G$ into a hierarchy of
-    components; then, solve the problem in each component at the bottom;
-    finally, piece together solutions all the way up for the whole $G$
     \item decompositions exists already, \textit{respect to the size} of the
     separator set $X$.  On the contrary, Tarjan studies \textit{respect to the
     structure}, namely $X$ has to be a \textit{clique}
+    \item \textit{divide and conquer}: decompose $G$ into a hierarchy of
+    components; then, solve the problem in each component at the bottom;
+    finally, piece together solutions all the way up for the whole $G$
     \item assume $G=(V, E)$ has a clique separator $C$, therefore $ \lbrace A,
     B, C \rbrace$ partitions $V$. So, $G$ decomposes to $G_{AC}=G(A\cup C)$ and
     $G_{BC}=G(B\cup C)$. Since they are both graphs, then recurs on both $G_{AC}$
@@ -227,13 +276,13 @@ $\pi$ elimination ordering for $G$ is perfect $\leftrightarrow$ $G$ is chordal
 \end{theorem}
 \begin{proof}
 $(\leftarrow)$ By hp, every cycle $(u, w_{0}, \ldots, w_{k-1}, v, u)$ in $G$ has a chord, 
-so for each smallest cycle $(u, w, z, v)$ such that
-$\pi(w),\pi(z)<\min{\lbrace\pi(u), \pi(v)\rbrace}$ exists either $ \lbrace u,z
+so for each smallest cycle $(u, w, z, v, u)$ of length $4$ such that
+$\pi(w),\pi(z)<\min{\lbrace\pi(u), \pi(v)\rbrace}$, there exists either $ \lbrace u,z
 \rbrace\in E$ or $ \lbrace w,v \rbrace\in E$, hence $F_{\pi}=\emptyset$.
 \vfill
 $(\rightarrow)$ By hp, $G=G_{\pi}$ because $F_{\pi}=\emptyset$, so for every
 path $(u, w_{0}, \ldots, w_{k-1}, v)$ such that $\pi(w_{j})< \min{ \lbrace \pi(u), \pi(v) \rbrace}$
-exists $ \lbrace u, v \rbrace\in E$. Hence exists $ \lbrace u, w_{i} \rbrace\in
+exists $ \lbrace u, v \rbrace\in E$. By induction on $k$, exists $ \lbrace u, w_{i} \rbrace\in
 E$ chord for cycle $(u, w_{0}, \ldots, w_{k-1}, v, u)$, making $G$ chordal.
 
 \end{proof}
@@ -275,12 +324,29 @@ where $B_{\pi}(v) = V\setminus \left(C_{\pi}(v)\cup A_{\pi}(v)\right)$
 and $A_{\pi}(v) = CC_{G\left(V\setminus C_{\pi}(v)\right)}(v)$.
 \vfill
 %if $D(G, v)$ returns when $C_{\pi}(v)$ is a clique, then $C_{\pi}(v)$ is a \emph{clique separator}
-if $D(G, v) = G$ then  $C_{\pi}(v)$ is a \emph{clique separator},\\
+if $D(G, v) \neq G$ then  $C_{\pi}(v)$ is a \emph{clique separator},\\
 so decompose $G$ into $G(A_{\pi}(v) \cup C_{\pi}(v))$ and $G(B_{\pi}(v) \cup C_{\pi}(v))$.
 \vfill
 \begin{block}{Python code}
-\textit{functools.reduce}(D, \textit{sorted}($V$, key=$\pi$), $G$)
+\textbf{from} \textit{functools} \textbf{import} \textit{reduce}\\
+\textit{reduce}(D, \textit{sorted}($V$, key=$\pi$), $G$)
 \end{block}
+\end{frame}
+
+\begin{frame}{output}
+the algorithm applied to $G=(V,E)$ produces
+\begin{displaymath}
+\begin{array}{ccccccccc}
+                   &         & C_{\pi}(v_{i_{1}})   &                                   \\
+                   & \diagup &                      & \diagdown                         \\
+A_{\pi}(v_{i_{1}}) &         &                      &           & C_{\pi}(v_{i_{2}})    \\
+                   &         &                      & \diagup   &                       & \ddots   \\
+                   &         & A_{\pi}(v_{i_{2}})   &           &                       &           & C_{\pi}(v_{i_{k}})  \\
+                   &         &                      & \ddots    &                       & \diagup   &                   & \diagdown  \\
+                   &         &                      &           & A_{\pi}(v_{i_{k}})    &           &                   &           & B_{\pi}(v_{i_{k}})   \\
+\end{array}
+\end{displaymath}
+for some $k\leq n$, where $\pi(v_{i_{j}})=j$ and $n=|V|$
 \end{frame}
 
 \begin{frame}{facts}
@@ -301,7 +367,10 @@ this problem relates to, and can be used to solve, other problems:
   
 
 \begin{frame}{ }
-\Huge \smiley
+\Huge
+\begin{CJK}{UTF8}{min}
+ありがとう
+\end{CJK}
 \end{frame}
 
 \end{document}
