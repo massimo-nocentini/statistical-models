@@ -1,0 +1,301 @@
+% $Header$
+
+\documentclass{beamer}
+
+% This file is a solution template for:
+
+% - Giving a talk on some subject.
+% - The talk is between 15min and 45min long.
+% - Style is ornate.
+
+
+
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to freely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+
+\mode<presentation>
+{
+  \usetheme{Pittsburgh}
+  \usecolortheme{dove}
+  \usefonttheme{professionalfonts}
+  \setbeamertemplate{blocks}[rounded][shadow=false]
+  \setbeamercolor{block title}{fg=structure,bg=lightgray}
+}
+
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{CJKutf8}
+\usepackage{amsfonts}
+\usepackage{color}
+\usepackage{pstricks,pst-text}
+\usepackage{pst-node,pst-tree}
+\usepackage{concrete}
+
+\usepackage{amsmath}%
+\usepackage{amsthm}
+\usepackage{amssymb}%
+\usepackage{wasysym}%
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{bbold}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+
+\title{Evolutionary Stochastic Search (ESS)}
+
+%\subtitle {Presentation Subtitle} % (optional)
+
+\author[Merlini, Nocentini] % (optional, use only with lots of authors)
+{Massimo Nocentini}
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute
+{
+  Dipartimento di Statistica, Informatica, Applicazioni \\
+  University of Florence, Italy
+}
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date[Short Occasion]{\today}
+
+
+\subject{
+This talk has an educational purpose to understand concepts explored in the
+paper "Decomposition by clique separators" by Robert E. Tarjan; moreover, we
+use it to pass a PhD course taught by prof. Giovanni Marchetti @ University of
+Florence.  Tarjan considers the problem of decomposing a graph by means of clique
+separators, by which he means finding cliques (complete graphs) whose removal
+disconnects the graph. 
+}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\iffalse
+\begin{frame}{Outline}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+\fi
+
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+
+\begin{frame}{intro}
+
+\begin{block}{we aim to study}
+\begin{itemize}
+    \item the paper \textit{ESS for Bayesian Model
+    Exploration}\\{\footnotesize by Bottolo \& Richardson, Bayesian
+    Analysis, Volume 5, Number 3, 2010}
+    \item fundamentals of Gibbs, Metropolis and Hastings samplers
+    \item stochastic explorations of sol spaces
+\end{itemize}
+\end{block}
+
+\begin{block}{the big picture}
+Authors propose a new sampling algorithm based upon \emph{Evolutionary Monte
+Carlo} and designed to work under the \emph{``large p, small n''} paradigm wrt
+Bayesian variable selection for \emph{linear Gaussian models}, such that it can
+be easily coupled with \emph{any prior for the variance-covariance of the
+regression coefficients}.
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{defs}
+Denote a Gaussian linear model with
+\begin{displaymath}
+    \vect{y} = \alpha\vect{1} + X\vect{\beta} + \vect{\varepsilon},\quad\vect{\varepsilon}\sim\mathcal{N}(0, \sigma^{2}I)
+\end{displaymath}
+where $\alpha\in\mathbb{R}$, $X$ is a $n\times p$ matrix of predictors 
+and $\vect{\beta}$ is a $p\times1$ vector of parameters
+\vfill
+Put a constant prior density on $\alpha$ and a prior on $\vect{\beta}$ which
+depends on a $p\times1$ \emph{latent binary vector} $\vect{\gamma}$ where
+$\gamma_{j}=1 \leftrightarrow \beta_{j}\neq0$
+\vfill
+let $\vect{y} = \alpha\vect{1} + X_{\gamma}\vect{\beta}_{\gamma} + \vect{\varepsilon}$ the model
+wrt selection induced by $\gamma$
+\vfill
+the conjugate prior of $(\vect{\beta}_{\gamma}, \sigma^{2})$ distributes as 
+\emph{normal-inverse gamma}
+\begin{displaymath}
+    p(\vect{\beta}_{\gamma}|\vect{\gamma}, \sigma^{2}) = \mathcal{N}(m_{\gamma}, \sigma^{2}\Sigma_{\gamma})\quad
+    p(\sigma^{2}|\vect{\gamma}) = p(\sigma^{2}) = \mathcal{\Gamma}^{-1}(a_{\sigma}, b_{\sigma})
+\end{displaymath}
+\end{frame}
+
+\begin{frame}{defs}
+factor the joint distribution as follows
+\begin{displaymath}
+    p(\vect{y}, \vect{\gamma}, \alpha, \vect{\beta}_{\gamma}, \sigma^{2}) = 
+        p(\vect{y}|\vect{\gamma}, \alpha, \vect{\beta}_{\gamma}, \sigma^{2})
+        p(\alpha)p(\vect{\beta}_{\gamma}|\vect{\gamma}, \sigma^{2})p(\sigma^{2})p(\vect{\gamma}) 
+\end{displaymath}
+\vfill
+marginal likelihood admits a closed formula
+\begin{displaymath}
+    \int{p(\vect{y}, \vect{\gamma}, \alpha, \vect{\beta}_{\gamma},
+    \sigma^{2})}d\alpha d\vect{\beta}_{\gamma} d\sigma^{2} = f(\Sigma_{\gamma})
+\end{displaymath}
+\vfill
+definition of $\Sigma_{\gamma}$ entails \emph{$g$-priors} if $\Sigma_{\gamma} =
+\tau \left(X_{\gamma}^{T}\,X_{\gamma}\right)^{-1}$ else \emph{independent
+priors} if $\Sigma_{\gamma} = \tau I$, where $\tau\in\mathbb{R}$ is the
+\emph{selection coeff}
+\vfill
+$p(\vect{\gamma})$ distributes as a \emph{beta-binomial}
+\begin{displaymath}
+p(\vect{\gamma}) = \int{p(\omega)p(\vect{\gamma}|\omega)d\omega} =
+\frac{B(p_{\gamma}+a_{\omega}, p-p_{\gamma}+b_{\omega})}{B(a_{\omega},
+b_{\omega})}
+\end{displaymath}
+where $p_{\gamma}=\vect{\gamma}^{T}\vect{1}$ and
+$p(\vect{\gamma}|\omega)=\omega^{p_{\gamma}}(1-\omega)^{p-p_{\gamma}}$.
+\end{frame}
+
+\begin{frame}{PT}
+\emph{multimodality of the model space rises complexity in vars selections}
+\begin{block}{Parallel Tempering}
+    \begin{itemize}
+        \item weaken dependency of a function from its parameters by adding an
+        extra one called \emph{temperature}
+        \item run a pool of Markov chains \emph{in parallel}, where a different
+        temperature is attached to each one, to flatten the likelihood
+        \item at every sweep of the algorithm, chains' states are swapped using
+        both the \emph{crossover} and \emph{exchange} operators
+    \end{itemize}
+    it ensures that the posterior is not trapped in any local mode because 
+    chains mix efficiently and often
+\end{block}
+\end{frame}
+
+\begin{frame}{EMC}
+EMC extents PT with \emph{local and global genetic} moves
+\begin{block}{Evolutionary Monte Carlo: \textbf{local} mutations}
+    \begin{itemize}
+        \item \emph{add, delete and swap}  moves update
+        $\vect{\gamma}_{l}$ within chain $l$
+        \item if $p >> p_{\gamma_{l}}$, which denotes the pop count of $\vect{\gamma}_{l}$:
+            \begin{itemize}
+                \item MCMC keeps adding rather than deleting a variable
+                \item add an \emph{accept/reject} step (fast to evaluate) to
+                mutate $ \lbrace \gamma_{i} \rbrace_{l}$ within model
+                $\vect{\gamma}_{l}$ with Gibbs-like steps
+                \item threshold probability for acceptance in chain $l$ depends on both the 
+                current size $p_{\gamma_{l}}$ and also the temperature $t_{l}$
+            \end{itemize}
+        \item at higher temperatures more models are mutated in a each sweep,
+        namely many $0$-valued indicators swap to $1$
+    \end{itemize}
+    the augmented FSMH sampler is computationally less demanding than a full Gibbs sampling 
+    over all indicators within model $\vect{\gamma}_{l}$
+    \end{block}
+\end{frame}
+
+\begin{frame}{EMC}
+EMC extents PT with \emph{local and global genetic} moves
+\begin{block}{Evolutionary Monte Carlo: \textbf{global} mutations}
+    \begin{itemize}
+        \item \emph{crossover} move swaps partial state of two chains
+            \begin{itemize}
+                \item select a pair $(l, r)$ such that it will give rise, after
+                the crossover, to new models $\vect{\gamma}_{l}^{\prime}$
+                and $\vect{\gamma}_{r}^{\prime}$ \emph{with higher posterior probability}
+                \item use the \emph{Boltzmann prob} $p_{t}(\vect{\gamma}_{k}|\tau) \propto e^{f(\vect{\gamma}_{k}|\tau)t^{-1}}$,\\
+                where $f(\vect{\gamma}_{k}|\tau)=\log{p(\vect{y}|\vect{\gamma}_{k},\tau)}+\log{p(\vect{\gamma}_{k})}$
+                \item accepts $\vect{\gamma}^{\prime}=(\vect{\gamma}_{1},\ldots,
+                \vect{\gamma}_{l}^{\prime},\ldots, \vect{\gamma}_{r}^{\prime},\ldots,
+                \vect{\gamma}_{L})$ with prob
+                \begin{displaymath}
+                    p(\vect{\gamma}\rightarrow\vect{\gamma}^{\prime}) = \min{ \left\lbrace 1,
+                    \frac{e^{f(\vect{\gamma_{l}}^{\prime}|\tau)/t_{l}+f(\vect{\gamma_{r}}^{\prime}|\tau)/t_{r}}}
+                         {e^{f(\vect{\gamma_{l}}|\tau)/t_{l}+f(\vect{\gamma_{r}}|\tau)/t_{r}}}
+                    \frac{Q(\vect{\gamma}^{\prime}\rightarrow\vect{\gamma}|\tau)}
+                         {Q(\vect{\gamma}\rightarrow\vect{\gamma}^{\prime}|\tau)}
+                    \right\rbrace}
+                \end{displaymath}
+            \end{itemize}
+        \item \emph{exchange} operator swaps states, entirely: 
+            \begin{itemize}
+                \item namely $\vect{\gamma}_{l}^{\prime} = \vect{\gamma}_{r}$
+                and $\vect{\gamma}_{r}^{\prime} = \vect{\gamma}_{l}$
+                \item sort chains according to temperature, then apply
+                \emph{pairwise on adjacent} chains to limit mixture of ``distant'' chains
+            \end{itemize}
+    \end{itemize}
+\end{block}
+\end{frame}
+  
+
+\begin{frame}{ }
+\Huge
+\begin{CJK}{UTF8}{min}
+%ありがとう
+楽しみ、バイバイ
+\end{CJK}
+\end{frame}
+
+\end{document}
+
+
