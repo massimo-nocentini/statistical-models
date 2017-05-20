@@ -287,6 +287,26 @@ EMC extents PT with \emph{local and global genetic} moves
 \end{block}
 \end{frame}
   
+\begin{frame}{ESS}
+\begin{block}{Evolutionary Stochastic Search}
+    \begin{itemize}
+        \item if $\tau$ is given then sample population $\vect{\gamma}$ according to: 
+            \begin{itemize}
+                \item perform one \emph{local move} with uniform probability; moreover, 
+                    use FSMH wrt $p_{\gamma_{l}}$ as in EMC, for each chain $l$ independently
+                \item perform a \emph{global move} with uniform probability; within burn-in period, prefer
+                    \emph{crossover} over \emph{exchange} mutations 
+            \end{itemize}
+        \item otherwise having a prior $p(\tau)$ 
+            \begin{itemize}
+                \item sample $p(\tau|\vect{\gamma})$ using \emph{Metropolis within Gibbs}
+                \item the whole $\vect{\gamma}$ is conditioned on a value $\tau$ common to all chains
+                \item it reaches \emph{equilibrium} (convergence) sooner than integrating out $\tau$ by Laplace approximation
+            \end{itemize}
+    \end{itemize}
+\end{block}
+\end{frame}
+
 
 \begin{frame}{ }
 \Huge
