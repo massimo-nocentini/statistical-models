@@ -175,7 +175,7 @@ depends on a $p\times1$ \emph{latent binary vector} $\vect{\gamma}$ where
 $\gamma_{j}=1 \leftrightarrow \beta_{j}\neq0$
 \vfill
 let $\vect{y} = \alpha\vect{1} + X_{\gamma}\vect{\beta}_{\gamma} + \vect{\varepsilon}$ the model
-wrt selection induced by $\gamma$
+wrt selection induced by $\vect{\gamma}$
 \vfill
 the conjugate prior of $(\vect{\beta}_{\gamma}, \sigma^{2})$ distributes as 
 \emph{normal-inverse gamma}
@@ -193,7 +193,7 @@ factor the joint distribution as follows
         p(\alpha)p(\vect{\beta}_{\gamma}|\vect{\gamma}, \sigma^{2})p(\sigma^{2})p(\vect{\gamma}) 
 \end{displaymath}
 \vfill
-marginal likelihood admits a closed formula
+marginal likelihood admits a closed formula which depends on $\Sigma_{\gamma}$
 \begin{displaymath}
     \int{p(\vect{y}, \vect{\gamma}, \alpha, \vect{\beta}_{\gamma},
     \sigma^{2})}d\alpha d\vect{\beta}_{\gamma} d\sigma^{2} = f(\Sigma_{\gamma})
@@ -226,7 +226,7 @@ $p(\vect{\gamma}|\omega)=\omega^{p_{\gamma}}(1-\omega)^{p-p_{\gamma}}$.
         both the \emph{crossover} and \emph{exchange} operators
     \end{itemize}
     it ensures that the posterior is not trapped in any local mode because 
-    chains mix efficiently and often
+    chains mix efficiently and often because of temperatures
 \end{block}
 \end{frame}
 
@@ -307,6 +307,25 @@ EMC extents PT with \emph{local and global genetic} moves
 \end{block}
 \end{frame}
 
+\begin{frame}{Facts}
+stressed against two real data examples:
+\begin{itemize}
+    \item investigation of genetic relagulations ($n=29$ observations, $p=1421$
+    covariates), using $4$ chains which all reach equilibrium, $15$ chromosomes
+    selected in the model
+    \item metabolomics data about enzyme level elevation ($n=50$, $p=10^{5}$), $29$
+    genes selected in the model
+\end{itemize}
+\vfill
+\begin{block}{Remarks}
+\begin{itemize}
+    \item ESSg with FSMH shows a better ability to escape from local modes and
+    to explore more efficiently the right tail.
+    \item a fixed $\tau$ entails a higher acceptance rate of global mutations;
+    othh, a prior on $\tau$ helps the algorithm to focus in well supported models.
+\end{itemize}
+\end{block}
+\end{frame}
 
 \begin{frame}{ }
 \Huge
